@@ -18,12 +18,15 @@ connected. Close the LibreCAL port in LibreCAL-GUI / LibreVNA-GUI eCal dialog
 before running (only one program can hold the serial port).
 
 Every output file carries the run timestamp (YYYYMMDD_HHMMSS), so runs never
-overwrite each other and all files of one run share the same stamp.
+overwrite each other and all files of one run share the same stamp. In
+addition, latest.cal is overwritten with the newest calibration so that
+changes between runs can be inspected with `git diff`.
 """
 import argparse
 import datetime
 import math
 import os
+import shutil
 import socket
 import sys
 import time
@@ -204,7 +207,8 @@ def main():
     ap.add_argument("--map", default="1:1,2:2",
                     help="VNA port -> LibreCAL port mapping, e.g. '1:1,2:2' or '1:3,2:4' (default 1:1,2:2)")
     ap.add_argument("--set", default="FACTORY", help="LibreCAL coefficient set (default FACTORY)")
-    ap.add_argument("--out", default="librecal_out", help="output directory (default ./librecal_out)")
+    ap.add_argument("--out", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "librecal_out"),
+                    help="output directory (default: librecal_out next to this script)")
     ap.add_argument("--host", default="localhost")
     ap.add_argument("--scpi-port", type=int, default=19542)
     ap.add_argument("--serial", help="LibreCAL serial device (default: auto-detect)")
@@ -346,6 +350,10 @@ def main():
     calfile = os.path.join(out, f"librecal_{stamp}.cal")
     vna.cmd(f"VNA:CAL:SAVE {calfile}")
     print(f"calibration saved to {calfile}")
+    # stable-named copy so `git diff` shows what changed between runs
+    latest = os.path.join(out, "latest.cal")
+    shutil.copyfile(calfile, latest)
+    print(f"copied to {latest}")
 
     # 7. verification: corrected measurement of LibreCAL states vs. their coefficients
     if not args.no_verify:
