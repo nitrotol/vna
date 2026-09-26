@@ -16,6 +16,9 @@ Flow:
 The LibreVNA-GUI must be running with the SCPI server enabled and the VNA
 connected. Close the LibreCAL port in LibreCAL-GUI / LibreVNA-GUI eCal dialog
 before running (only one program can hold the serial port).
+
+Every output file carries the run timestamp (YYYYMMDD_HHMMSS), so runs never
+overwrite each other and all files of one run share the same stamp.
 """
 import argparse
 import datetime
@@ -243,7 +246,7 @@ def main():
     print(f"LibreCAL temperature stable at {float(cal.query(':TEMP?')):.2f} °C")
 
     # 3. download coefficients -> touchstone files
-    tsdir = os.path.join(out, f"coeffs_{cal_serial}_{args.set}")
+    tsdir = os.path.join(out, f"coeffs_{cal_serial}_{args.set}_{stamp}")
     os.makedirs(tsdir, exist_ok=True)
     coeffs = {}  # our standard name -> (touchstone path, data, kit type)
     for v in vna_ports:
@@ -291,7 +294,7 @@ def main():
     vna.cmd("VNA:CAL:KIT:MAN LibreCAL")
     vna.cmd(f"VNA:CAL:KIT:SER {cal_serial}")
     vna.cmd(f"VNA:CAL:KIT:DESC LibreCAL_{args.set}_{stamp}")
-    vna.cmd(f"VNA:CAL:KIT:SAVE {os.path.join(out, f'librecal_{cal_serial}_{args.set}.calkit')}")
+    vna.cmd(f"VNA:CAL:KIT:SAVE {os.path.join(out, f'librecal_{cal_serial}_{args.set}_{stamp}.calkit')}")
 
     # 5. measurements
     vna.cmd("VNA:CAL:RESET")
