@@ -1,0 +1,60 @@
+{
+    "Description": "Default calibration kit with ideal standards",
+    "Manufacturer": "LibreVNA",
+    "Serialnumber": "",
+    "standards": [
+        {
+            "params": {
+                "C0": 0.0,
+                "C1": 0.0,
+                "C2": 0.0,
+                "C3": 0.0,
+                "Z0": 50.0,
+                "delay": 0.0,
+                "id": 3267241425035741470,
+                "loss": 0.0,
+                "name": "Ideal Open Standard"
+            },
+            "type": "Open"
+        },
+        {
+            "params": {
+                "L0": 0.0,
+                "L1": 0.0,
+                "L2": 0.0,
+                "L3": 0.0,
+                "Z0": 50.0,
+                "delay": 0.0,
+                "id": 12830292570910024961,
+                "loss": 0.0,
+                "name": "Ideal Short Standard"
+            },
+            "type": "Short"
+        },
+        {
+            "params": {
+                "Cfirst": true,
+                "Cparallel": 0.0,
+                "Lseries": 0.0,
+                "Z0": 50.0,
+                "delay": 0.0,
+                "id": 5313110773122295546,
+                "loss": 0.0,
+                "name": "Ideal Load Standard",
+                "resistance": 50.0
+            },
+            "type": "Load"
+        },
+        {
+            "params": {
+                "Z0": 50.0,
+                "delay": 0.0,
+                "id": 13278282247129359860,
+                "loss": 0.0,
+                "name": "Ideal Through Standard"
+            },
+            "type": "Through"
+        }
+    ],
+    "version": "1.6.5-5fee370d4"
+}
